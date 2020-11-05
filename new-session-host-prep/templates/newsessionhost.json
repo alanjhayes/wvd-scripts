@@ -17,7 +17,7 @@
             }
         },
         "emartifactsLocation": {
-            "defaultValue": "https://wvdportalstorageblob.blob.core.windows.net/galleryartifacts/Configuration.zip",
+            "defaultValue": "https://raw.githubusercontent.com/alanjhayes/wvd-scripts/main/new-session-host-prep/artifacts/Configuration.zip",
             "type": "String",
             "metadata": {
                 "description": "The base URI where artifacts required by this template are located."
