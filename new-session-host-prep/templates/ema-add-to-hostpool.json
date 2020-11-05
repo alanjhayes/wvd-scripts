@@ -9,15 +9,15 @@
                 "description": "The base URI where artifacts required by this template are located."
             }
         },
-        "artifactsLocation": {
-            "defaultValue": "https://wvdportalstorageblob.blob.core.windows.net/galleryartifacts/Configuration.zip",
+        "emnestedTemplatesLocation": {
+            "defaultValue": "https://raw.githubusercontent.com/alanjhayes/wvd-scripts/main/new-session-host-prep/templates/",
             "type": "String",
             "metadata": {
                 "description": "The base URI where artifacts required by this template are located."
             }
         },
-        "emartifactsLocation": {
-            "defaultValue": "https://github.com/alanjhayes/wvd-scripts/raw/main/new-session-host-prep/artifacts/test/release/Configuration.zip",
+        "artifactsLocation": {
+            "defaultValue": "https://wvdportalstorageblob.blob.core.windows.net/galleryartifacts/Configuration.zip",
             "type": "String",
             "metadata": {
                 "description": "The base URI where artifacts required by this template are located."
@@ -339,6 +339,7 @@
         "hostpoolName": "[replace(parameters('hostpoolName'),'\"','')]",
         "vmTemplateName": "[concat( if(variables('rdshManagedDisks'), 'managedDisks', 'unmanagedDisks'), '-', toLower(replace(parameters('vmImageType'),' ', '')), 'vm')]",
         "vmTemplateUri": "[concat(parameters('nestedTemplatesLocation'), variables('vmTemplateName'),'.json')]",
+        "emTemplateUri": "[concat(parameters('emnestedTemplatesLocation'), 'wvd-em-managedDisks-galleryvm.json')]",
         "rdshVmNamesOutput": {
             "copy": [
                 {
@@ -418,7 +419,7 @@
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[variables('vmTemplateUri')]",
+                    "uri": "[variables('emTemplateUri')]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
@@ -527,30 +528,6 @@
                 }
             },
             "resourceGroup": "[parameters('vmResourceGroup')]"
-        },
-        {
-            "apiVersion": "2018-06-01",
-            "type": "Microsoft.Compute/virtualMachines/extensions",
-            "name": "[concat(parameters('vmNamePrefix'), '-', add(copyindex(), parameters('vmInitialNumber')), '/', 'config-app')]",
-            "location": "[resourceGroup().location]",
-            "dependsOn": ["[concat('vmCreation-linkedTemplate-', parameters('deploymentId'))]"],
-            "copy": {
-                "name": "em-dsc-loop",
-                "count": "[parameters('vmNumberOfInstances')]"
-            },
-            "properties": {
-                "publisher": "Microsoft.Compute",
-                "type": "CustomScriptExtension",
-                "typeHandlerVersion": "1.10",
-                "autoUpgradeMinorVersion": true,
-                "settings": {
-                    "fileUris": [
-                        "https://raw.githubusercontent.com/alanjhayes/wvd-scripts/main/new-session-host-prep/artifacts/test/contents/Script-NewHostPrep.ps1"
-                    ],
-                    "commandToExecute":"powershell.exe -executionpolicy bypass Script-NewHostPrep.ps1",
-                    "timestamp":234567890
-                }
-            }
         }
     ],
     "outputs": {
