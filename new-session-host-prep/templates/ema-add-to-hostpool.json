@@ -538,9 +538,6 @@
                 "name": "em-dsc-loop",
                 "count": "[parameters('vmNumberOfInstances')]"
             },
-            "tags": {
-                "displayName": "config-app"
-            },
             "properties": {
                 "publisher": "Microsoft.Compute",
                 "type": "CustomScriptExtension",
@@ -551,10 +548,7 @@
                         "https://raw.githubusercontent.com/alanjhayes/wvd-scripts/main/new-session-host-prep/artifacts/test/contents/Script-NewHostPrep.ps1"
                     ],
                     "commandToExecute":"powershell.exe -executionpolicy bypass Script-NewHostPrep.ps1",
-                    "timestamp":123456789
-                },
-                "protectedSettings": {
-                    "managedIdentity" : {}
+                    "timestamp":234567890
                 }
             }
         }
