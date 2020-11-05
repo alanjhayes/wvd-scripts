@@ -529,9 +529,9 @@
             "resourceGroup": "[parameters('vmResourceGroup')]"
         },
         {
-                "apiVersion": "2018-06-01",
+            "apiVersion": "2018-06-01",
             "type": "Microsoft.Compute/virtualMachines/extensions",
-            "name": "virtualMachineName/config-app",
+            "name": "[concat(parameters('vmNamePrefix'), '-', add(copyindex(), parameters('vmInitialNumber')), '/', 'config-app')]",
             "location": "[resourceGroup().location]",
             "dependsOn": ["[concat('vmCreation-linkedTemplate-', parameters('deploymentId'))]"],
             "copy": {
