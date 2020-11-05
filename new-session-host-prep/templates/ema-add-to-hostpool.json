@@ -531,7 +531,7 @@
         {
         "apiVersion": "2018-10-01",
         "type": "Microsoft.Compute/virtualMachines/extensions",
-        "name": "[concat(parameters('vmNamePrefix'), add(copyindex(), parameters('vmInitialNumber')), '/', 'dscextension')]",
+        "name": "[concat(parameters('vmNamePrefix'), '-', add(copyindex(), parameters('vmInitialNumber')), '/', 'dscextension')]",
         "location": "[parameters('vmlocation')]",
         "dependsOn": ["[concat('vmCreation-linkedTemplate-', parameters('deploymentId'))]"],
         "copy": {
