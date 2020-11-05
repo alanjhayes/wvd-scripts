@@ -529,26 +529,35 @@
             "resourceGroup": "[parameters('vmResourceGroup')]"
         },
         {
-        "apiVersion": "2018-10-01",
-        "type": "Microsoft.Compute/virtualMachines/extensions",
-        "name": "[concat(parameters('vmNamePrefix'), '-', add(copyindex(), parameters('vmInitialNumber')), '/', 'dscextension')]",
-        "location": "[parameters('vmlocation')]",
-        "dependsOn": ["[concat('vmCreation-linkedTemplate-', parameters('deploymentId'))]"],
-        "copy": {
-          "name": "em-dsc-loop",
-          "count": "[parameters('vmNumberOfInstances')]"
-        },
-        "properties": {
-          "publisher": "Microsoft.Powershell",
-          "type": "DSC",
-          "typeHandlerVersion": "2.73",
-          "autoUpgradeMinorVersion": true,
-          "settings": {
-            "modulesUrl": "[parameters('emartifactsLocation')]",
-            "configurationFunction": "Configuration.ps1\\NewHostPrep"
-          }
+                "apiVersion": "2018-06-01",
+            "type": "Microsoft.Compute/virtualMachines/extensions",
+            "name": "virtualMachineName/config-app",
+            "location": "[resourceGroup().location]",
+            "dependsOn": ["[concat('vmCreation-linkedTemplate-', parameters('deploymentId'))]"],
+            "copy": {
+                "name": "em-dsc-loop",
+                "count": "[parameters('vmNumberOfInstances')]"
+            },
+            "tags": {
+                "displayName": "config-app"
+            },
+            "properties": {
+                "publisher": "Microsoft.Compute",
+                "type": "CustomScriptExtension",
+                "typeHandlerVersion": "1.10",
+                "autoUpgradeMinorVersion": true,
+                "settings": {
+                    "fileUris": [
+                        "https://raw.githubusercontent.com/alanjhayes/wvd-scripts/main/new-session-host-prep/artifacts/test/contents/Script-NewHostPrep.ps1"
+                    ],
+                    "commandToExecute":"powershell.exe -executionpolicy bypass Script-NewHostPrep.ps1",
+                    "timestamp":123456789
+                },
+                "protectedSettings": {
+                    "managedIdentity" : {}
+                }
+            }
         }
-      }
     ],
     "outputs": {
         "rdshVmNamesObject": {
