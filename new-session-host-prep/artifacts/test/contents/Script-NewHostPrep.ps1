@@ -1,10 +1,8 @@
 
 $ScriptPath = [system.io.path]::GetDirectoryName($PSCommandPath)
 
-# Dot sourcing Functions.ps1 file
-. (Join-Path $ScriptPath "Functions.ps1")
+Write-host "$scriptpath"
 
-
-Write-Log -Message "Writing dummy file to the c:\testfile.txt"
+Write-host "Writing dummy file to the c:\testfile.txt"
 "hello world " | out-file "c:\testfile.txt"
 
